@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Replica Manager</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+            width: 300px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .replica-count {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        button {
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 1em;
+            padding: 10px 20px;
+            margin: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .message {
+            margin-top: 20px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Replica Manager</h1>
+        <div class="replica-count" id="replica-count">0</div>
+        <button onclick="incrementReplica()">Increment</button>
+        <button onclick="decrementReplica()">Decrement</button>
+        <div class="message" id="message"></div>
+    </div>
+
+    <script>
+        async function getReplicaCount() {
+            const response = await fetch('/replica_count');
+            const data = await response.json();
+            document.getElementById('replica-count').innerText = data.replica_count;
+        }
+
+        async function incrementReplica() {
+            const response = await fetch('/increment', { method: 'POST' });
+            const data = await response.json();
+            document.getElementById('message').innerText = data.message;
+            getReplicaCount();
+        }
+
+        async function decrementReplica() {
+            const response = await fetch('/decrement', { method: 'POST' });
+            const data = await response.json();
+            document.getElementById('message').innerText = data.message;
+            getReplicaCount();
+        }
+
+        // Initial load
+        getReplicaCount();
+    </script>
+</body>
+</html>
+
